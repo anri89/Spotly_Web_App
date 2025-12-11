@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <title>Spotly · Friends</title>
+    <link rel="stylesheet" href="/css/main.css" />
+  </head>
+
+  <body class="page--dark">
+    <nav class="navbar">
+      <a href="/" class="nav-left">
+        <div class="logo-dot"></div>
+        <span>Spotly</span>
+      </a>
+      
+      <div class="nav-right">
+        <a href="/explore">Explore</a>
+        <a href="/spots/add">Add Spot</a>
+        <a href="/spots/friends">Friends</a>
+        <a href="/users/profile">Profile</a>
+      </div>
+    </nav>
+
+    <main class="friends-wrapper">
+      <section class="friends-inner">
+        <h1>Meet like-minded friends</h1>
+        <p>Find and connect with people who share your favourite vibes and local spots.</p>
+        <a class="findmatches-btn">Find Matches</a>
+
+        <div class="matches-grid">
+          <% matches.forEach(m => { %>
+            <div class="match-card">
+              <div class="match-header">
+                <div class="match-avatar">
+                  IMG
+                </div>
+                <div>
+                  <div class="match-name"><%= m.name %></div>
+                  <div class="match-tags">
+                    <% m.shared.slice(0,2).forEach(tag => { %>
+                      <div class="match-tag"><%= tag %></div>
+                    <% }) %>
+                  </div>
+                </div>
+              </div>
+
+              <div class="match-text">
+                You both love <%= m.shared.join(' & ') %>.
+              </div>
+
+              <a class="addfriend-btn">Add Friend</a>
+            </div>
+          <% }) %>
+        </div>
+      </section>
+    </main>
+
+    <footer class="footer-basic">
+      <div>Spotly — Discover the vibe. Share your world.</div>
+      <div class="dim">© <%= new Date().getFullYear() %> Anri</div>
+    </footer>
+  </body>
+</html>

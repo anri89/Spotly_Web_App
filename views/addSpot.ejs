@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <title>Spotly · Add Spot</title>
+    <link rel="stylesheet" href="/css/main.css" />
+  </head>
+
+  <body class="page--dark">
+    <nav class="navbar">
+      <a href="/" class="nav-left">
+        <div class="logo-dot"></div>
+        <span>Spotly</span>
+      </a>
+      
+      <div class="nav-right">
+        <a href="/explore">Explore</a>
+        <a href="/spots/add">Add Spot</a>
+        <a href="/spots/friends">Friends</a>
+        <a href="/users/profile">Profile</a>
+      </div>
+    </nav>
+
+    <main class="addspot-page">
+      <form class="addspot-card" action="/spots/add" method="POST">
+        <h1>Add a New Spot</h1>
+
+        <div class="form-block">
+          <label class="form-label">Upload photo</label>
+          <div class="spot-card-image" style="height:120px;">
+            (image upload coming soon)
+          </div>
+        </div>
+
+        <div class="form-block">
+          <label class="form-label">Spot title</label>
+          <input class="form-input" name="title" placeholder="Spot title"/>
+        </div>
+
+        <div class="form-block">
+          <label class="form-label">Location name</label>
+          <input class="form-input" name="locationName" placeholder="e.g. The Bell Inn"/>
+        </div>
+
+        <div class="form-block">
+          <label class="form-label">Description</label>
+          <textarea class="form-textarea" name="description" placeholder="Why is this place special? What’s the vibe?"></textarea>
+        </div>
+
+        <div class="form-block">
+          <label class="form-label">Vibe tags</label>
+          <div class="vibe-row">
+            <div class="vibe-pill">Chill</div>
+            <div class="vibe-pill">Lively</div>
+            <div class="vibe-pill">Study</div>
+            <div class="vibe-pill">Cozy</div>
+            <div class="vibe-pill">+</div>
+          </div>
+        
+        </div>
+
+        
+
+        <button class="submit-btn">Save Spot</button>
+      </form>
+    </main>
+
+    <footer class="footer-basic">
+      <div>Spotly — Discover the vibe. Share your world.</div>
+      <div class="dim">© <%= new Date().getFullYear() %> Anri</div>
+    </footer>
+  </body>
+</html>

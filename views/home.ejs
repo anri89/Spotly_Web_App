@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <title>Spotly</title>
+    <link rel="stylesheet" href="/css/main.css" />
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" rel="stylesheet" />
+  </head>
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<script>
+  document.addEventListener("DOMContentLoaded", function () {
+    const map = L.map("hero-map", {
+      zoomControl: false,
+      attributionControl: false,
+    }).setView([51.3813, -2.3590], 13); // Bath-ish
+
+    L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
+      maxZoom: 19,
+    }).addTo(map);
+
+    L.marker([51.3813, -2.3590])
+      .addTo(map)
+      .bindPopup("Bath city centre")
+      .openPopup();
+  });
+</script>
+
+
+  <body class="page--dark">
+    <nav class="navbar">
+      <a href="/" class="nav-left">
+        <div class="logo-dot"></div>
+        <span>Spotly</span>
+      </a>
+      
+      <div class="nav-right">
+        <a href="/explore">Explore</a>
+        <a href="/spots/add">Add Spot</a>
+        <a href="/spots/friends">Friends</a>
+        <a href="/users/profile">Profile</a>
+      </div>
+    </nav>
+
+    <main style="flex:1;">
+      <section class="hero">
+        <div class="hero-left">
+          <h1>Discover the vibe<br/>of your city</h1>
+          <p>
+            Find the best places and events based on your mood.
+            Share what’s good by adding your own spots, photos &amp; more.
+          </p>
+
+          <a class="cta-btn" href="/explore">Explore the map</a>
+        </div>
+
+        <div class="hero-right">
+          <div class="spot-card">
+            <div class="spot-card-image">
+              <div id="hero-map"></div>
+            </div>            
+            <div class="spot-card-title">The Hideout</div>
+            <div class="vibe-chip">CHILL</div>
+          </div>
+
+          <div class="vibe-chip-row">
+            <div class="vibe-chip">CHILL</div>
+            <div class="vibe-chip party">PARTY</div>
+            <div class="vibe-chip study">STUDY</div>
+            <div class="vibe-chip artsy">ARTSY</div>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <footer class="footer-basic">
+      <div>Spotly — Discover the vibe. Share your world.</div>
+      <div class="dim">© <%= new Date().getFullYear() %> Anri</div>
+    </footer>
+  </body>
+</html>

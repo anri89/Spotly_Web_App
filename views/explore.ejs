@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <title>Spotly · Explore</title>
+    <link rel="stylesheet" href="/css/main.css" />
+    <link
+  rel="stylesheet"
+  href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+/>
+
+  </head>
+
+  <body class="page--dark">
+    <nav class="navbar">
+      <a href="/" class="nav-left">
+        <div class="logo-dot"></div>
+        <span>Spotly</span>
+      </a>
+      
+      <div class="nav-right">
+        <a href="/explore">Explore</a>
+        <a href="/spots/add">Add Spot</a>
+        <a href="/spots/friends">Friends</a>
+        <a href="/users/profile">Profile</a>
+      </div>
+    </nav>
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<script src="/js/explore.js"></script>
+</body>
+</html>
+
+
+    <main class="explore-wrapper">
+      <section class="explore-layout">
+        <div class="map-panel">
+          <div class="map-topbar">
+            <input placeholder="Search the map..." />
+            <button>Change vibe</button>
+          </div>
+
+          <div class="map-area">
+            <div id="explore-map"></div>
+          </div>
+            </div>
+          </div>
+        </div>
+
+        <aside class="right-sidebar">
+          <div class="side-card">
+            <div class="title">Royal Victoria Park</div>
+            <div class="meta">Colorful • Flowers • Calm walks</div>
+            <div class="time">Tom • 3h ago</div>
+          </div>
+
+          <div class="side-card">
+            <div class="title">Allsorts Jam Night</div>
+            <div class="meta">Live music • Social</div>
+            <div class="time">3d ago</div>
+          </div>
+
+          <div class="side-card">
+            <div class="title">Summer Courtyard Acoustic Set</div>
+            <div class="meta">Cozy • Warm lights • Chill</div>
+            <div class="time">Emma • 4d ago</div>
+          </div>
+        </aside>
+      </section>
+    </main>
+
+    <footer class="footer-basic">
+      <div>Spotly — Discover the vibe. Share your world.</div>
+      <div class="dim">© <%= new Date().getFullYear() %> Anri</div>
+    </footer>
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<script>
+  document.addEventListener("DOMContentLoaded", function () {
+    const map = L.map("explore-map", {
+      zoomControl: true,
+    }).setView([51.3813, -2.3590], 13); // centre around Bath
+
+    L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
+      maxZoom: 19,
+    }).addTo(map);
+
+    L.marker([51.3813, -2.3590])
+      .addTo(map)
+      .bindPopup("Bath city centre")
+      .openPopup();
+  });
+</script>
+
+  </body>
+</html>
