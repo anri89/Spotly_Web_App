@@ -1,4 +1,4 @@
-/* GLOBAL DESIGN TOKENS */
+
 
 :root {
     --bg-dark: #0f1020;
@@ -191,6 +191,8 @@
     width: 100%;          
     font-size: .9rem;
   }
+
+  
   
   .addspot-card .spot-card-image {
     background: rgba(255,255,255,0.05);
@@ -422,7 +424,7 @@
     margin: 0 0 1.5rem 0;
     color: #fff;
   }
-  /* all form inputs stay inside the container */
+  
 .addspot-card *,
 .addspot-card *::before,
 .addspot-card *::after {
@@ -434,7 +436,7 @@
 .form-textarea {
   width: 100%;
   max-width: 100%;
-  box-sizing: border-box;   /* THIS prevents overflow */
+  box-sizing: border-box;   
 }
 .addspot-card {
   width: 100%;
@@ -520,6 +522,9 @@
   
   
   
+
+
+
   .friends-wrapper {
     flex: 1;
     background: radial-gradient(circle at 10% 10%, rgba(90,0,200,0.6) 0%, rgba(0,0,0,0) 60%), #0f1020;
@@ -666,5 +671,4 @@
     background: #0f1020;
     color: var(--text-light);
   }
-  
   
