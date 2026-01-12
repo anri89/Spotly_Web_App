@@ -1,13 +1,18 @@
 import mongoose from "mongoose";
 
-const SpotSchema = new mongoose.Schema({
-  title: { type: String, required: true },
-  locationName: String,
-  description: String,
-  vibeTags: [String],
-  
-  createdAt: { type: Date, default: Date.now },
-});
+const spotSchema = new mongoose.Schema(
+  {
+    title: { type: String, required: true },
+    locationName: { type: String, required: true },
+    description: { type: String, default: "" },
+    vibeTags: [{ type: String }],
+    lat: { type: Number, default: null },
+    lng: { type: Number, default: null },
 
-const Spot = mongoose.model("Spot", SpotSchema);
-export default Spot;
+    
+    userId: { type: mongoose.Schema.Types.ObjectId, ref: "User" },
+  },
+  { timestamps: true }
+);
+
+export default mongoose.model("Spot", spotSchema);

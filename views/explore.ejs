@@ -3,69 +3,125 @@
   <head>
     <meta charset="UTF-8" />
     <title>Spotly · Explore</title>
+
     <link rel="stylesheet" href="/css/main.css" />
     <link
-  rel="stylesheet"
-  href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
-/>
-
+      rel="stylesheet"
+      href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+    />
   </head>
 
   <body class="page--dark">
+    <!-- background lines -->
+    <div class="bg-draw" aria-hidden="true">
+      <svg viewBox="0 0 1440 900" preserveAspectRatio="none">
+        <path
+          class="draw-line yellow"
+          pathLength="1000"
+          style="--pathLen:1000"
+          d="
+            M180,-40
+            C240,160 200,320 120,480
+            C40,680 80,820 220,1040
+          "
+        />
+
+        <path
+          class="draw-line green"
+          pathLength="1000"
+          style="--pathLen:1000"
+          d="
+            M360,780
+            C620,640 880,640 1160,780
+          "
+        />
+
+        <path
+          class="draw-line blue"
+          pathLength="1000"
+          style="--pathLen:1000"
+          d="
+            M1380,-80
+            C1500,120 1500,280 1380,360
+            C1260,440 1260,620 1380,700
+            C1500,780 1500,960 1380,1080
+          "
+        />
+      </svg>
+    </div>
+
+    <!-- nav bar -->
     <nav class="navbar">
       <a href="/" class="nav-left">
         <div class="logo-dot"></div>
         <span>Spotly</span>
       </a>
-      
+
       <div class="nav-right">
-        
         <a href="/explore">Explore</a>
         <a href="/spots/add">Add Spot</a>
         <a href="/spots/friends">Friends</a>
-        <a href="/users/profile">Profile</a>
-
+      
+        <% if (isLoggedIn) { %>
+          <a href="/users/profile">Profile</a>
+      
+          <form action="/users/logout" method="POST" style="display:inline;">
+            <button class="nav-btn" type="submit">Log out</button>
+          </form>
+        <% } else { %>
+          <a href="/users/login">Login</a>
+          <a href="/users/register">Register</a>
+        <% } %>
       </div>
+      
     </nav>
-    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
-<script src="/js/explore.js"></script>
-</body>
-</html>
 
-
+    <!-- main -->
     <main class="explore-wrapper">
       <section class="explore-layout">
+        
         <div class="map-panel">
-          <div class="map-topbar">
-            <input placeholder="Search the map..." />
-            <button>Change vibe</button>
-          </div>
+          
+          <form action="/explore" method="GET" class="map-topbar">
+            <input
+              id="spotSearch"
+              type="text"
+              name="vibe"
+              placeholder="Search vibe (e.g. chill, party, study)..."
+              value="<%= vibe || '' %>"
+              autocomplete="off"
+            />
+            <button type="submit" class="change-vibe-btn">Change vibe</button>
+          </form>
 
           <div class="map-area">
             <div id="explore-map"></div>
           </div>
-            </div>
-          </div>
         </div>
 
+        
         <aside class="right-sidebar">
-          <div class="side-card">
-            <div class="title">Royal Victoria Park</div>
-            <div class="meta">Colorful • Flowers • Calm walks</div>
-            <div class="time">Tom • 3h ago</div>
-          </div>
+          <% if (!spots || spots.length === 0) { %>
+            <div class="side-card">
+              <div class="title">No spots found</div>
+              <div class="meta">Try another vibe (e.g. chill)</div>
+            </div>
+          <% } %>
 
-          <div class="side-card">
-            <div class="title">Allsorts Jam Night</div>
-            <div class="meta">Live music • Social</div>
-            <div class="time">3d ago</div>
-          </div>
-
-          <div class="side-card">
-            <div class="title">Summer Courtyard Acoustic Set</div>
-            <div class="meta">Cozy • Warm lights • Chill</div>
-            <div class="time">Emma • 4d ago</div>
-          </div>
+          <% (spots || []).forEach((s) => { %>
+            <button
+              type="button"
+              class="side-card side-card-btn"
+              data-spot-id="<%= s._id %>"
+              data-spot-title="<%= (s.title || '').replace(/"/g, '&quot;') %>"
+              data-spot-location="<%= (s.locationName || '').replace(/"/g, '&quot;') %>"
+              data-spot-tags="<%= (s.vibeTags || []).join(',').replace(/"/g, '&quot;') %>"
+            >
+              <div class="title"><%= s.title || "Untitled spot" %></div>
+              <div class="meta"><%= (s.vibeTags && s.vibeTags.length) ? s.vibeTags.join(" • ") : "No vibe tags" %></div>
+              <div class="time"><%= s.locationName || "" %></div>
+            </button>
+          <% }) %>
         </aside>
       </section>
     </main>
@@ -74,23 +130,13 @@
       <div>Spotly — Discover the vibe. Share your world.</div>
       <div class="dim">© <%= new Date().getFullYear() %> Anri</div>
     </footer>
+
+    
+    <script>
+      window.__SPOTS__ = <%- JSON.stringify(spots || []) %>;
+    </script>
+
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
-<script>
-  document.addEventListener("DOMContentLoaded", function () {
-    const map = L.map("explore-map", {
-      zoomControl: true,
-    }).setView([51.3813, -2.3590], 13); // centre around Bath
-
-    L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
-      maxZoom: 19,
-    }).addTo(map);
-
-    L.marker([51.3813, -2.3590])
-      .addTo(map)
-      .bindPopup("Bath city centre")
-      .openPopup();
-  });
-</script>
-
+    <script src="/js/explore.js"></script>
   </body>
 </html>

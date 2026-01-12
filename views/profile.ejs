@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
   <head>
     <meta charset="UTF-8" />
     <title>Spotly · Profile</title>
@@ -7,25 +7,181 @@
   </head>
 
   <body class="page--dark">
+    <!-- background lines -->
+    <div class="bg-draw" aria-hidden="true">
+      <svg viewBox="0 0 1440 900" preserveAspectRatio="none">
+        <path
+          class="draw-line yellow"
+          pathLength="1000"
+          style="--pathLen:1000"
+          d="
+            M180,-40
+            C240,160 200,320 120,480
+            C40,680 80,820 220,1040
+          "
+        />
+
+        <path
+          class="draw-line green"
+          pathLength="1000"
+          style="--pathLen:1000"
+          d="
+            M360,780
+            C620,640 880,640 1160,780
+          "
+        />
+
+        <path
+          class="draw-line blue"
+          pathLength="1000"
+          style="--pathLen:1000"
+          d="
+            M1380,-80
+            C1500,120 1500,280 1380,360
+            C1260,440 1260,620 1380,700
+            C1500,780 1500,960 1380,1080
+          "
+        />
+      </svg>
+    </div>
+    <%
+  const safeUser = (typeof user !== "undefined") ? user : null;
+  const safeSpots = (typeof spots !== "undefined") ? spots : [];
+  const safeVibes = (typeof vibeSummary !== "undefined") ? vibeSummary : [];
+%>
+<%= ((safeUser?.displayName || safeUser?.username || "U").slice(0,2)).toUpperCase() %>
+
+
     <nav class="navbar">
-        <a href="/" class="nav-left">
-            <div class="logo-dot"></div>
-            <span>Spotly</span>
-          </a>
-          
+      <a href="/" class="nav-left">
+        <div class="logo-dot"></div>
+        <span>Spotly</span>
+      </a>
+
       <div class="nav-right">
         <a href="/explore">Explore</a>
         <a href="/spots/add">Add Spot</a>
         <a href="/spots/friends">Friends</a>
-        <a href="/users/profile">Profile</a>
+        <a href="/users/profile" class="active">Profile</a>
       </div>
     </nav>
 
-    <main class="friends-wrapper">
-      <section class="friends-inner">
-        <h1>Your profile</h1>
-        <p>Coming soon</p>
-      </section>
+    <main class="profile-wrapper">
+      <div class="profile-surface">
+        <section class="profile-header glass-panel">
+          <div class="profile-avatar">
+            <%= (safeUser?.displayName || safeUser?.username || "U").slice(0,2).toUpperCase() %>
+          </div>
+
+          <div class="profile-meta">
+            <h1 class="profile-title">
+              <%= safeUser?.displayName || safeUser?.username || "Your profile" %>
+
+            </h1>
+
+            <% if (safeUser?.email) { %>
+              <span><%= safeUser.email %></span>
+            <% } else { %>
+            
+                <span>Guest mode</span>
+              <% } %>
+            </div>
+
+            <div class="profile-actions">
+              <form action="/users/logout" method="POST">
+                <button class="btn-small" type="submit">Log out</button>
+              </form>
+            </div>
+          </div>
+        </section>
+
+        <section class="profile-grid">
+          
+          <div class="profile-card glass-panel">
+            <div class="profile-card-title">Your vibe summary</div>
+            <div class="profile-card-sub">
+              Based on the vibe tags on your saved spots.
+            </div>
+
+            <% if (vibeSummary && vibeSummary.length > 0) { %>
+              <div class="vibe-summary">
+                <% vibeSummary.forEach(v => { %>
+                  <div class="vibe-pill big">
+                    <span class="vibe-name"><%= v.vibe %></span>
+                    <span class="vibe-count"><%= v.count %></span>
+                  </div>
+                <% }) %>
+              </div>
+            <% } else { %>
+              <div class="empty-note">
+                No vibes yet — save a few spots with vibe tags like <b>chill</b> or <b>party</b>.
+              </div>
+            <% } %>
+          </div>
+
+          
+          <div class="profile-card glass-panel">
+            <div class="profile-card-title">Stats</div>
+
+            <div class="stats-grid">
+              <div class="stat-box">
+                <div class="stat-num"><%= (spots && spots.length) ? spots.length : 0 %></div>
+                <div class="stat-label">Saved spots</div>
+              </div>
+
+              <div class="stat-box">
+                <div class="stat-num"><%= (vibeSummary && vibeSummary.length) ? vibeSummary.length : 0 %></div>
+                <div class="stat-label">Vibes used</div>
+              </div>
+
+              <div class="stat-box">
+                <div class="stat-num">
+                  <%= safeUser?.createdAt ? new Date(safeUser.createdAt).toLocaleDateString() : "—" %>
+
+                </div>
+                <div class="stat-label">Joined</div>
+              </div>
+            </div>
+
+            <div class="profile-card-sub" style="margin-top: .75rem;">
+              Tip: go to <b>Friends</b> to find matches who share your top vibes.
+            </div>
+          </div>
+        </section>
+
+        
+        <section class="profile-list glass-panel">
+          <div class="profile-card-title">Your saved spots</div>
+
+          <% if (safeSpots.length > 0) { %>
+            <div class="spots-grid">
+              <% safeSpots.forEach(s => { %>
+                <div class="spot-mini">
+                  <div class="spot-mini-title"><%= s.title %></div>
+
+                  <div class="spot-mini-meta">
+                    <%= s.locationName ? s.locationName : "Unknown location" %>
+                  </div>
+
+                  <div class="spot-mini-tags">
+                    <% (s.vibeTags || []).slice(0,3).forEach(t => { %>
+                      <span class="mini-tag"><%= t %></span>
+                    <% }) %>
+                  </div>
+
+                  <div class="spot-mini-time">
+                    <%= s.createdAt ? new Date(s.createdAt).toLocaleDateString() : "" %>
+                  </div>
+                </div>
+              <% }) %>
+            </div>
+          <% } else { %>
+            <div class="empty-note">
+              You haven’t saved any spots yet. Try adding one from <a href="/spots/add">Add Spot</a>.
+            </div>
+          <% } %>
+        </section>
+      </div>
     </main>
 
     <footer class="footer-basic">

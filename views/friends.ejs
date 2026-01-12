@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
   <head>
     <meta charset="UTF-8" />
     <title>Spotly · Friends</title>
@@ -7,37 +7,101 @@
   </head>
 
   <body class="page--dark">
+    <!-- background lines -->
+    <div class="bg-draw" aria-hidden="true">
+      <svg viewBox="0 0 1440 900" preserveAspectRatio="none">
+        <path
+          class="draw-line yellow"
+          pathLength="1000"
+          style="--pathLen:1000"
+          d="
+            M180,-40
+            C240,160 200,320 120,480
+            C40,680 80,820 220,1040
+          "
+        />
+
+        <path
+          class="draw-line green"
+          pathLength="1000"
+          style="--pathLen:1000"
+          d="
+            M360,780
+            C620,640 880,640 1160,780
+          "
+        />
+
+        <path
+          class="draw-line blue"
+          pathLength="1000"
+          style="--pathLen:1000"
+          d="
+            M1380,-80
+            C1500,120 1500,280 1380,360
+            C1260,440 1260,620 1380,700
+            C1500,780 1500,960 1380,1080
+          "
+        />
+      </svg>
+    </div>
+
+    <% const safeMatches = (typeof matches !== "undefined" && matches) ? matches : []; %>
+
     <nav class="navbar">
       <a href="/" class="nav-left">
         <div class="logo-dot"></div>
         <span>Spotly</span>
       </a>
-      
+
       <div class="nav-right">
         <a href="/explore">Explore</a>
         <a href="/spots/add">Add Spot</a>
         <a href="/spots/friends">Friends</a>
-        <a href="/users/profile">Profile</a>
+      
+        <% if (isLoggedIn) { %>
+          <a href="/users/profile">Profile</a>
+      
+          <form action="/users/logout" method="POST" style="display:inline;">
+            <button class="nav-btn" type="submit">Log out</button>
+          </form>
+        <% } else { %>
+          <a href="/users/login">Login</a>
+          <a href="/users/register">Register</a>
+        <% } %>
       </div>
+      
     </nav>
 
     <main class="friends-wrapper">
       <section class="friends-inner">
         <h1>Meet like-minded friends</h1>
         <p>Find and connect with people who share your favourite vibes and local spots.</p>
-        <a class="findmatches-btn">Find Matches</a>
+
+        
+        <form action="/spots/friends/matches" method="POST">
+          <button class="findmatches-btn" type="submit">Find Matches</button>
+        </form>
+
+        <% if (safeMatches.length === 0) { %>
+          <div class="friends-empty">
+            <div class="friends-empty-title">No matches yet</div>
+            <div class="friends-empty-text">
+              Tap <b>Find Matches</b> to generate suggestions based on shared vibes.
+            </div>
+          </div>
+        <% } %>
 
         <div class="matches-grid">
-          <% matches.forEach(m => { %>
+          <% safeMatches.forEach(m => { %>
             <div class="match-card">
               <div class="match-header">
                 <div class="match-avatar">
-                  IMG
+                  <%= (m.initials || "U") %>
                 </div>
                 <div>
                   <div class="match-name"><%= m.name %></div>
                   <div class="match-tags">
-                    <% m.shared.slice(0,2).forEach(tag => { %>
+                    <% (m.shared || []).slice(0, 2).forEach(tag => { %>
                       <div class="match-tag"><%= tag %></div>
                     <% }) %>
                   </div>
@@ -45,10 +109,14 @@
               </div>
 
               <div class="match-text">
-                You both love <%= m.shared.join(' & ') %>.
+                <% if ((m.shared || []).length > 0) { %>
+                  You both love <%= m.shared.join(" & ") %>.
+                <% } else { %>
+                  You might vibe together — explore shared spots and interests.
+                <% } %>
               </div>
 
-              <a class="addfriend-btn">Add Friend</a>
+              <button class="addfriend-btn" type="button">Add Friend</button>
             </div>
           <% }) %>
         </div>

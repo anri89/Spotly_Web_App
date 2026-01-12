@@ -12,7 +12,7 @@
     const map = L.map("hero-map", {
       zoomControl: false,
       attributionControl: false,
-    }).setView([51.3813, -2.3590], 13); // Bath-ish
+    }).setView([51.3813, -2.3590], 13); 
 
     L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
       maxZoom: 19,
@@ -22,11 +22,16 @@
       .addTo(map)
       .bindPopup("Bath city centre")
       .openPopup();
+      setTimeout(() => {
+  map.invalidateSize();
+}, 200);
+
   });
 </script>
 
 
   <body class="page--dark">
+    
     <nav class="navbar">
       <a href="/" class="nav-left">
         <div class="logo-dot"></div>
@@ -37,20 +42,36 @@
         <a href="/explore">Explore</a>
         <a href="/spots/add">Add Spot</a>
         <a href="/spots/friends">Friends</a>
-        <a href="/users/profile">Profile</a>
+      
+        <% if (isLoggedIn) { %>
+          <a href="/users/profile">Profile</a>
+      
+          <form action="/users/logout" method="POST" style="display:inline;">
+            <button class="nav-btn" type="submit">Log out</button>
+          </form>
+        <% } else { %>
+          <a href="/users/login">Login</a>
+          <a href="/users/register">Register</a>
+        <% } %>
       </div>
+      
     </nav>
 
     <main style="flex:1;">
       <section class="hero">
         <div class="hero-left">
-          <h1>Discover the vibe<br/>of your city</h1>
+          <h1 class="hero-title spotlight-text" data-text="Discover the vibe of your city">
+            Discover the vibe<br/>of your city
+          </h1>
+          
+          
           <p>
             Find the best places and events based on your mood.
             Share what’s good by adding your own spots, photos &amp; more.
           </p>
 
-          <a class="cta-btn" href="/explore">Explore the map</a>
+          <a href="/explore" class="btn">Explore the map</a>
+
         </div>
 
         <div class="hero-right">
@@ -59,22 +80,84 @@
               <div id="hero-map"></div>
             </div>            
             <div class="spot-card-title">The Hideout</div>
-            <div class="vibe-chip">CHILL</div>
-          </div>
+            
 
-          <div class="vibe-chip-row">
-            <div class="vibe-chip">CHILL</div>
-            <div class="vibe-chip party">PARTY</div>
-            <div class="vibe-chip study">STUDY</div>
-            <div class="vibe-chip artsy">ARTSY</div>
-          </div>
+            <div class="vibe-chip-row">
+              <a class="vibe-chip" href="/explore?vibe=chill">CHILL</a>
+              <a class="vibe-chip party" href="/explore?vibe=party">PARTY</a>
+              <a class="vibe-chip study" href="/explore?vibe=study">STUDY</a>
+              <a class="vibe-chip artsy" href="/explore?vibe=artsy">ARTSY</a>
+            </div>
+            
+            
+          
         </div>
       </section>
+     <!-- backgound lines -->
+<div class="bg-draw" aria-hidden="true">
+  <svg viewBox="0 0 1440 900" preserveAspectRatio="none">
+    
+    <path
+  class="draw-line yellow"
+  pathLength="1000"
+  style="--pathLen:1000"
+  d="
+    M340,-40
+    C400,160 360,320 280,480
+    C180,680 220,820 360,1040
+  "
+/>
+
+
+
+
+    <path
+      class="draw-line green"
+      pathLength="1000"
+      style="--pathLen:1000"
+      d="M520,880 C650,740 910,740 1040,880"
+    />
+
+    <path
+  class="draw-line blue"
+  pathLength="1000"
+  style="--pathLen:1000"
+  d="M1320,-80
+     C1480,60 1480,250 1320,330
+     C1160,410 1160,540 1320,610
+     C1480,690 1480,880 1320,1020"
+/>
+
+
+  </svg>
+</div>
+
+      
     </main>
 
     <footer class="footer-basic">
       <div>Spotly — Discover the vibe. Share your world.</div>
       <div class="dim">© <%= new Date().getFullYear() %> Anri</div>
     </footer>
+    <script>
+      document.addEventListener("DOMContentLoaded", () => {
+        const el = document.querySelector(".spotlight-text");
+        if (!el) return;
+    
+        el.addEventListener("mousemove", (e) => {
+          const r = el.getBoundingClientRect();
+          const x = ((e.clientX - r.left) / r.width) * 100;
+          const y = ((e.clientY - r.top) / r.height) * 100;
+          el.style.setProperty("--mx", x + "%");
+          el.style.setProperty("--my", y + "%");
+        });
+    
+        el.addEventListener("mouseleave", () => {
+          el.style.setProperty("--mx", "50%");
+          el.style.setProperty("--my", "50%");
+        });
+      });
+    </script>
+    
   </body>
 </html>

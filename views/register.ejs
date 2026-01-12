@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8" />
+  <title>Spotly · Register</title>
+  <link rel="stylesheet" href="/css/main.css" />
+</head>
+<body class="page--dark">
+    <!-- background lines-->
+    <div class="bg-draw" aria-hidden="true">
+        <svg viewBox="0 0 1440 900" preserveAspectRatio="none">
+          <path
+            class="draw-line yellow"
+            pathLength="1000"
+            style="--pathLen:1000"
+            d="
+              M180,-40
+              C240,160 200,320 120,480
+              C40,680 80,820 220,1040
+            "
+          />
+  
+          <path
+            class="draw-line green"
+            pathLength="1000"
+            style="--pathLen:1000"
+            d="
+              M360,780
+              C620,640 880,640 1160,780
+            "
+          />
+  
+          <path
+            class="draw-line blue"
+            pathLength="1000"
+            style="--pathLen:1000"
+            d="
+              M1380,-80
+              C1500,120 1500,280 1380,360
+              C1260,440 1260,620 1380,700
+              C1500,780 1500,960 1380,1080
+            "
+          />
+        </svg>
+      </div>
+
+  <nav class="navbar">
+    <a href="/" class="nav-left">
+      <div class="logo-dot"></div>
+      <span>Spotly</span>
+    </a>
+
+    <div class="nav-right">
+      <a href="/explore">Explore</a>
+      <a href="/spots/add">Add Spot</a>
+      <a href="/spots/friends">Friends</a>
+
+      <% if (isLoggedIn) { %>
+        <a href="/users/profile">Profile</a>
+        <form action="/users/logout" method="POST" style="display:inline;">
+          <button class="nav-btn" type="submit">Log out</button>
+        </form>
+      <% } else { %>
+        <a href="/users/login">Login</a>
+        <a href="/users/register" class="active">Register</a>
+      <% } %>
+    </div>
+  </nav>
+
+  <main class="addspot-page">
+    <section class="addspot-card">
+      <h1>Create account</h1>
+
+      <% if (error) { %>
+        <p style="color:#ffb4b4;"><%= error %></p>
+      <% } %>
+
+      <form action="/users/register" method="POST">
+        <div class="form-block">
+          <label class="form-label">Display name</label>
+          <input class="form-input" name="displayName" value="<%= (form && form.displayName) || '' %>"/>
+        </div>
+
+        <div class="form-block">
+          <label class="form-label">Username</label>
+          <input class="form-input" name="username" required value="<%= (form && form.username) || '' %>"/>
+        </div>
+
+        <div class="form-block">
+          <label class="form-label">Email</label>
+          <input class="form-input" name="email" type="email" required value="<%= (form && form.email) || '' %>"/>
+        </div>
+
+        <div class="form-block">
+          <label class="form-label">Password</label>
+          <input class="form-input" name="password" type="password" required />
+        </div>
+
+        <button class="submit-btn" type="submit">Register</button>
+      </form>
+
+      <p style="margin-top:1rem; color: var(--text-dim);">
+        Already have an account? <a href="/users/login" style="color:#fff;">Login</a>
+      </p>
+    </section>
+  </main>
+
+  <footer class="footer-basic">
+    <div>Spotly — Discover the vibe. Share your world.</div>
+    <div class="dim">© <%= new Date().getFullYear() %> Anri</div>
+  </footer>
+</body>
+</html>
